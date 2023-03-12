@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,8 @@ export class RegisterPage implements OnInit {
   Clave='';
   cclave='';
 
-  constructor(private autenticador: AngularFireAuth ) { }
+  constructor(private autenticador: AngularFireAuth,
+               private router: Router ) { }
 
   Register() {
    const { Usuario, Clave, cclave } = this;
@@ -20,7 +22,8 @@ export class RegisterPage implements OnInit {
       console.log('Contraseñas no coinciden.');  
     }else{
       try{
-        const result = this.autenticador.createUserWithEmailAndPassword( Usuario, Clave);
+        const result = this.autenticador.createUserWithEmailAndPassword( Usuario, Clave)
+        .then(() => this.router.navigate(['home'])) ;
       }catch(err){
        console.dir(err);
       }
@@ -28,6 +31,10 @@ export class RegisterPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  Cancel(){
+    this.router.navigate(['login'])
   }
 
 }
